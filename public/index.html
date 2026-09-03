@@ -3,173 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPY BOTZ - Dresses Shop & Admin</title>
+    <title>SPY BOTZ - Dresses Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-800">
     <header class="bg-white shadow-md p-4 flex justify-between items-center max-w-6xl mx-auto rounded-b-lg">
         <h1 class="text-2xl font-bold text-pink-600">SPY BOTZ Shop</h1>
-        <div class="space-x-3">
-            <button onclick="showSection('shop')" class="text-sm bg-pink-100 text-pink-800 px-3 py-1 rounded-full font-semibold">Shop</button>
-            <button onclick="showSection('admin')" class="text-sm bg-gray-900 text-white px-3 py-1 rounded-full font-semibold">Admin Panel</button>
-        </div>
     </header>
 
     <main class="max-w-6xl mx-auto p-6">
-        <!-- Shop Section -->
-        <div id="shop-section">
-            <h2 class="text-xl font-semibold mb-4">Available Dresses</h2>
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+        <h2 class="text-xl font-semibold mb-4">Available Dresses</h2>
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
 
-            <!-- Order Form -->
-            <div class="mt-10 bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
-                <h3 class="text-xl font-bold mb-4 text-pink-600">Checkout & Place Order</h3>
-                <form id="order-form" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium">Select Dress ID</label>
-                        <input type="number" id="dressId" required class="w-full border p-2 rounded mt-1" placeholder="Enter Dress ID">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Your Name</label>
-                        <input type="text" id="name" required class="w-full border p-2 rounded mt-1" placeholder="Your name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Phone Number</label>
-                        <input type="text" id="phone" required class="w-full border p-2 rounded mt-1" placeholder="Phone number">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Delivery Address</label>
-                        <textarea id="address" required class="w-full border p-2 rounded mt-1" placeholder="Address"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Payment Method</label>
-                        <select id="paymentMethod" class="w-full border p-2 rounded mt-1">
-                            <option value="Online Payment (UPI/Card)">Online Payment (UPI / Card)</option>
-                            <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded hover:bg-pink-700">Buy Now</button>
-                </form>
-                <p id="response-msg" class="mt-4 font-medium text-center text-green-600"></p>
-            </div>
-        </div>
-
-        <!-- Admin Panel Section -->
-        <div id="admin-section" class="hidden space-y-10">
-            <!-- Add New Product Form -->
-            <div class="bg-white p-6 rounded-lg shadow max-w-xl mx-auto">
-                <h3 class="text-xl font-bold mb-4 text-pink-600">Add New Dress (Image & Price)</h3>
-                <form id="add-product-form" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium">Dress Name</label>
-                        <input type="text" id="p-name" required class="w-full border p-2 rounded mt-1" placeholder="e.g. Party Wear Gown">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Price (₹)</label>
-                        <input type="number" id="p-price" required class="w-full border p-2 rounded mt-1" placeholder="1499">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Size</label>
-                        <input type="text" id="p-size" required class="w-full border p-2 rounded mt-1" placeholder="S, M, L, XL">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Image URL (Photo Link)</label>
-                        <input type="url" id="p-image" required class="w-full border p-2 rounded mt-1" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <button type="submit" class="w-full bg-gray-900 text-white font-bold py-2 rounded hover:bg-pink-600">Add Product to Site</button>
-                </form>
-                <p id="add-product-msg" class="mt-2 text-center font-medium text-green-600"></p>
-            </div>
-
-            <!-- Orders Table -->
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Member Orders</h2>
-                <div class="bg-white rounded-lg shadow overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100 border-b text-sm text-gray-700">
-                                <th class="p-3">Order ID</th>
-                                <th class="p-3">Customer</th>
-                                <th class="p-3">Phone</th>
-                                <th class="p-3">Address</th>
-                                <th class="p-3">Dress</th>
-                                <th class="p-3">Price</th>
-                                <th class="p-3">Payment</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-orders-table">
-                            <tr><td colspan="7" class="p-4 text-center text-gray-500">Loading...</td></tr>
-                        </tbody>
-                    </table>
+        <!-- Order Form -->
+        <div class="mt-10 bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+            <h3 class="text-xl font-bold mb-4 text-pink-600">Checkout & Place Order</h3>
+            <form id="order-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Select Dress ID</label>
+                    <input type="number" id="dressId" required class="w-full border p-2 rounded mt-1" placeholder="Enter Dress ID">
                 </div>
-            </div>
-        </div>
-
-        <!-- Help Contact -->
-        <div id="contact" class="mt-12 bg-white p-6 rounded-lg shadow text-center">
-            <h3 class="text-lg font-bold text-gray-700">Need Help? Contact Us</h3>
-            <p class="text-gray-600 mt-2">Call/WhatsApp: <span class="font-semibold text-pink-600">+91 XXXXXXXXXX</span></p>
+                <div>
+                    <label class="block text-sm font-medium">Your Name</label>
+                    <input type="text" id="name" required class="w-full border p-2 rounded mt-1" placeholder="Your name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Phone Number</label>
+                    <input type="text" id="phone" required class="w-full border p-2 rounded mt-1" placeholder="Phone number">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Delivery Address</label>
+                    <textarea id="address" required class="w-full border p-2 rounded mt-1" placeholder="Address"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Payment Method</label>
+                    <select id="paymentMethod" class="w-full border p-2 rounded mt-1">
+                        <option value="Online Payment (UPI/Card)">Online Payment (UPI / Card)</option>
+                        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded hover:bg-pink-700">Buy Now</button>
+            </form>
+            <p id="response-msg" class="mt-4 font-medium text-center text-green-600"></p>
         </div>
     </main>
 
     <script>
-        function showSection(section) {
-            if (section === 'shop') {
-                document.getElementById('shop-section').classList.remove('hidden');
-                document.getElementById('admin-section').classList.add('hidden');
-                loadProducts();
-            } else {
-                document.getElementById('shop-section').classList.add('hidden');
-                document.getElementById('admin-section').classList.remove('hidden');
-                loadAdminData();
-            }
-        }
-
-        function loadProducts() {
-            fetch('/api/dresses')
-                .then(res => res.json())
-                .then(data => {
-                    const grid = document.getElementById('product-grid');
-                    grid.innerHTML = data.map(item => `
-                        <div class="bg-white rounded-lg shadow overflow-hidden p-4 flex flex-col justify-between">
-                            <div>
-                                <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover rounded">
-                                <h3 class="font-bold mt-2 text-lg">ID: ${item.id} - ${item.name}</h3>
-                                <p class="text-pink-600 font-bold text-xl mt-1">₹${item.price}</p>
-                                <p class="text-gray-500 text-sm">Size: ${item.size}</p>
-                            </div>
-                            <button onclick="document.getElementById('dressId').value=${item.id}; window.scrollTo({top: 800, behavior: 'smooth'});" class="mt-4 bg-gray-900 text-white py-1.5 rounded hover:bg-pink-600 transition">Select to Buy</button>
+        fetch('/api/dresses')
+            .then(res => res.json())
+            .then(data => {
+                const grid = document.getElementById('product-grid');
+                grid.innerHTML = data.map(item => `
+                    <div class="bg-white rounded-lg shadow overflow-hidden p-4 flex flex-col justify-between">
+                        <div>
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover rounded">
+                            <h3 class="font-bold mt-2 text-lg">ID: ${item.id} - ${item.name}</h3>
+                            <p class="text-pink-600 font-bold text-xl mt-1">₹${item.price}</p>
+                            <p class="text-gray-500 text-sm">Size: ${item.size}</p>
                         </div>
-                    `).join('');
-                });
-        }
-
-        loadProducts();
-
-        // Add Product Form Submit
-        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const payload = {
-                name: document.getElementById('p-name').value,
-                price: document.getElementById('p-price').value,
-                size: document.getElementById('p-size').value,
-                image: document.getElementById('p-image').value
-            };
-
-            const res = await fetch('/api/admin/add-dress', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                        <button onclick="document.getElementById('dressId').value=${item.id}; window.scrollTo({top: 800, behavior: 'smooth'});" class="mt-4 bg-gray-900 text-white py-1.5 rounded hover:bg-pink-600 transition">Select to Buy</button>
+                    </div>
+                `).join('');
             });
-            const data = await res.json();
-            document.getElementById('add-product-msg').innerText = data.message;
-            if(data.success) {
-                document.getElementById('add-product-form').reset();
-                loadProducts();
-            }
-        });
 
-        // Order Form Submit
         document.getElementById('order-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const payload = {
@@ -189,30 +85,6 @@
             document.getElementById('response-msg').innerText = data.message;
             if(data.success) document.getElementById('order-form').reset();
         });
-
-        // Load Admin Orders
-        async function loadAdminData() {
-            const res = await fetch('/api/admin/orders');
-            const orders = await res.json();
-            const tbody = document.getElementById('admin-orders-table');
-            
-            if (orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-500">No orders found.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = orders.map(ord => `
-                <tr class="border-b text-sm">
-                    <td class="p-3 font-mono">${ord.orderId}</td>
-                    <td class="p-3 font-semibold">${ord.customerName}</td>
-                    <td class="p-3">${ord.phone}</td>
-                    <td class="p-3">${ord.address}</td>
-                    <td class="p-3">${ord.dressName}</td>
-                    <td class="p-3 text-pink-600 font-bold">₹${ord.price}</td>
-                    <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">${ord.paymentMethod}</span></td>
-                </tr>
-            `).join('');
-        }
     </script>
 </body>
 </html>
