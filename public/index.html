@@ -5,25 +5,51 @@
 <title>SPY BOTZ - Ultra Dress Shop</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>#lightbox{display:none}#lightbox.active{display:flex}.discount-badge{position:absolute;top:8px;left:8px}</style>
+<style>
+#lightbox{display:none}#lightbox.active{display:flex}
+#checkout-wrapper{display:none}
+#checkout-wrapper.active{display:block;position:fixed;inset:0;z-index:100;background:#f9fafb;overflow-y:auto;padding:16px}
+</style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 <header class="bg-white shadow p-4 flex justify-between items-center max-w-6xl mx-auto rounded-b-lg sticky top-0 z-30">
 <h1 class="text-2xl font-bold text-pink-600">SPY BOTZ Shop</h1>
 <a href="#trackBox" class="bg-black text-white px-4 py-1 rounded-full text-xs">Track Order</a>
 </header>
+
 <main class="max-w-6xl mx-auto p-6">
 <h2 class="text-xl font-bold mb-4">Available Dresses - Ultra Collection</h2>
 <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
 
-<!-- CHECKOUT WRAPPER - ETA SELECTED PRODUCT ER NICHE JABE -->
-<div id="checkout-wrapper" class="hidden mt-6">
-<div class="bg-white p-6 rounded-xl shadow-xl max-w-xl mx-auto border-t-4 border-pink-600">
+<!-- TRACK ORDER -->
+<div id="trackBox" class="mt-16 bg-white p-6 rounded-xl shadow max-w-xl mx-auto">
+<h3 class="font-bold text-lg"><i class="fa-solid fa-truck-fast"></i> Track Your Order</h3>
+<p class="text-xs text-gray-500 mb-2">Phone number diye search koro</p>
+<div class="flex gap-2"><input id="trackPhone" placeholder="Phone Number" class="flex-1 border p-2 rounded"><button onclick="trackOrder()" class="bg-black text-white px-4 rounded">Track</button></div>
+<div id="trackResult" class="mt-4 text-sm"></div>
+</div>
+
+<div class="mt-10 bg-white p-5 rounded-lg shadow max-w-4xl mx-auto">
+<h3 class="font-bold">SPY BOTZ Shop Details</h3>
+<p class="text-sm mt-2">Premium quality at best discount. Online a extra discount, COD available. 3-5 days fast delivery.</p>
+<p class="mt-3 text-sm"><i class="fa-solid fa-envelope text-pink-600"></i> spybotzyt@gmail.com | <i class="fa-solid fa-phone text-green-600"></i> +919004244736</p>
+<a href="https://t.me/Botmaster55" target="_blank" class="block w-full bg-black text-white text-center py-4 rounded-xl font-bold mt-4">DEVELOPER - TELEGRAM / WHATSAPP</a>
+<div class="flex gap-2 mt-3"><a href="https://wa.link/hxyi2q" target="_blank" class="flex-1 bg-green-600 text-white text-center py-3 rounded-lg font-bold">WhatsApp</a><a href="https://t.me/Botmaster55" target="_blank" class="flex-1 bg-sky-500 text-white text-center py-3 rounded-lg font-bold">Telegram</a></div>
+</div>
+</main>
+
+<!-- FULL PAGE CHECKOUT MODAL -->
+<div id="checkout-wrapper">
+<div class="bg-white p-6 rounded-xl shadow-xl max-w-xl mx-auto border-t-4 border-pink-600 mt-4">
+<div class="flex justify-between items-center mb-3">
 <h3 class="text-xl font-bold text-pink-600">Checkout & Place Order</h3>
-<p id="checkout-product-name" class="text-sm text-gray-500 mb-2"></p>
+<button onclick="closeCheckout()" class="bg-gray-200 px-3 py-1 rounded-full font-bold">✕ Close</button>
+</div>
+<div id="checkout-product-info" class="flex gap-3 mb-4 bg-gray-50 p-3 rounded-lg"></div>
+<p id="checkout-product-name" class="text-sm text-gray-500 mb-2 font-bold"></p>
 <div id="price-summary" class="bg-gray-100 p-3 rounded mb-4 text-sm font-medium"></div>
 <form id="order-form" class="space-y-3">
-<input id="dressId" required readonly class="w-full border p-2 rounded bg-gray-100 font-bold" placeholder="Dress ID">
+<input id="dressId" required readonly class="w-full border p-2 rounded bg-gray-100 font-bold">
 <input id="name" required class="w-full border p-2 rounded" placeholder="Your Name">
 <input id="phone" required class="w-full border p-2 rounded" placeholder="Phone Number">
 <textarea id="address" required class="w-full border p-2 rounded" placeholder="Full Delivery Address"></textarea>
@@ -45,40 +71,34 @@
 <div class="flex justify-center items-center gap-2"><code class="bg-white px-2 py-1 rounded text-xs font-bold">BHARATPE.9Q0Q0K0Z8Q466572@unitype</code><button type="button" onclick="navigator.clipboard.writeText('BHARATPE.9Q0Q0K0Z8Q466572@unitype');alert('Copied!')" class="bg-pink-600 text-white px-2 py-1 rounded text-xs">Copy</button></div>
 </div>
 <button class="w-full bg-pink-600 text-white font-bold py-3 rounded-lg text-lg">Buy Now - Place Order</button>
+<button type="button" onclick="closeCheckout()" class="w-full bg-gray-200 py-2 rounded-lg mt-2">Back to Shopping</button>
 </form>
 <p id="response-msg" class="mt-3 text-center font-bold text-green-600"></p>
 </div>
 </div>
 
-<!-- TRACK ORDER -->
-<div id="trackBox" class="mt-16 bg-white p-6 rounded-xl shadow max-w-xl mx-auto">
-<h3 class="font-bold text-lg"><i class="fa-solid fa-truck-fast"></i> Track Your Order</h3>
-<p class="text-xs text-gray-500 mb-2">Phone number diye search koro, dekhte pabe kothay ache</p>
-<div class="flex gap-2"><input id="trackPhone" placeholder="Phone Number" class="flex-1 border p-2 rounded"><button onclick="trackOrder()" class="bg-black text-white px-4 rounded">Track</button></div>
-<div id="trackResult" class="mt-4 text-sm"></div>
-</div>
-
-<!-- SHOP DETAILS -->
-<div class="mt-10 bg-white p-5 rounded-lg shadow max-w-4xl mx-auto">
-<h3 class="font-bold">SPY BOTZ Shop Details</h3>
-<p class="text-sm mt-2">We provide premium quality dresses at best discount. Online payment a extra discount, COD available. 3-5 days fast delivery. Tumi location share korle aro fast delivery hobe. Tracking admin panel theke update kora hobe.</p>
-<p class="mt-3 text-sm"><i class="fa-solid fa-envelope text-pink-600"></i> spybotzyt@gmail.com | <i class="fa-solid fa-phone text-green-600"></i> +919004244736</p>
-<a href="https://t.me/Botmaster55" target="_blank" class="block w-full bg-black text-white text-center py-4 rounded-xl font-bold mt-4 text-lg">DEVELOPER - TELEGRAM / WHATSAPP</a>
-<div class="flex gap-2 mt-3"><a href="https://wa.link/hxyi2q" target="_blank" class="flex-1 bg-green-600 text-white text-center py-3 rounded-lg font-bold">WhatsApp</a><a href="https://t.me/Botmaster55" target="_blank" class="flex-1 bg-sky-500 text-white text-center py-3 rounded-lg font-bold">Telegram</a></div>
-</div>
-</main>
-<div id="lightbox" class="fixed inset-0 bg-black/80 z-50 items-center justify-center p-4" onclick="this.classList.remove('active')"><img id="lightbox-img" class="max-h-[90vh] rounded-lg shadow-2xl"></div>
+<div id="lightbox" class="fixed inset-0 bg-black/80 z-[200] items-center justify-center p-4" onclick="this.classList.remove('active')"><img id="lightbox-img" class="max-h-[90vh] rounded-lg shadow-2xl"></div>
 <script>
 let allDresses=[],selectedProduct=null;
 const checkoutWrapper=document.getElementById('checkout-wrapper');
 function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('active')}
-function selectToBuy(id){selectedProduct=allDresses.find(d=>d.id==id);document.getElementById('dressId').value=id;document.getElementById('checkout-product-name').innerText=`Selected: ID ${selectedProduct.id} - ${selectedProduct.name}`;updatePriceSummary();checkoutWrapper.classList.remove('hidden');document.getElementById(`card-${id}`).insertAdjacentElement('afterend',checkoutWrapper);checkoutWrapper.scrollIntoView({behavior:'smooth',block:'center'})}
-function updatePriceSummary(){if(!selectedProduct)return;let base=parseInt(selectedProduct.price),orig=selectedProduct.originalPrice?parseInt(selectedProduct.originalPrice):Math.round(base*1.8),method=document.getElementById('paymentMethod').value,final=method.includes('Cash')?base+150:base,save=orig-final;document.getElementById('price-summary').innerHTML=`<div class="flex justify-between"><span>Original:</span><span class="line-through">₹${orig}</span></div><div class="flex justify-between"><span>Discount Price:</span><span>₹${base}</span></div><div class="flex justify-between font-bold text-base border-t pt-1 mt-1"><span>Final Payable (${method.includes('Cash')?'+₹150 COD': 'Online Disc'}):</span><span class="text-pink-600">₹${final}</span></div><div class="text-green-600 text-xs">You Save ₹${save}!</div>`;document.getElementById('price-summary').dataset.final=final;document.getElementById('online-pay-box').style.display=method.includes('Cash')?'none':'block'}
+function closeCheckout(){checkoutWrapper.classList.remove('active');document.body.style.overflow='auto'}
+function selectToBuy(id){
+  selectedProduct=allDresses.find(d=>d.id==id);
+  document.getElementById('dressId').value=id;
+  document.getElementById('checkout-product-name').innerText=`Selected: ID ${selectedProduct.id} - ${selectedProduct.name}`;
+  document.getElementById('checkout-product-info').innerHTML=`<img src="${selectedProduct.image}" class="w-20 h-20 rounded object-cover"><div><p class="font-bold text-sm">${selectedProduct.name}</p><p class="text-xs">${selectedProduct.details||''}</p><p class="text-pink-600 font-bold">₹${selectedProduct.price}</p></div>`;
+  updatePriceSummary();
+  checkoutWrapper.classList.add('active');
+  document.body.style.overflow='hidden';
+  window.scrollTo(0,0);
+}
+function updatePriceSummary(){if(!selectedProduct)return;let base=parseInt(selectedProduct.price),orig=selectedProduct.originalPrice?parseInt(selectedProduct.originalPrice):Math.round(base*1.8),method=document.getElementById('paymentMethod').value,final=method.includes('Cash')?base+150:base,save=orig-final;document.getElementById('price-summary').innerHTML=`<div class="flex justify-between"><span>Original:</span><span class="line-through">₹${orig}</span></div><div class="flex justify-between"><span>Discount Price:</span><span>₹${base}</span></div><div class="flex justify-between font-bold text-base border-t pt-1 mt-1"><span>Final Payable:</span><span class="text-pink-600">₹${final}</span></div><div class="text-green-600 text-xs">You Save ₹${save}!</div>`;document.getElementById('price-summary').dataset.final=final;document.getElementById('online-pay-box').style.display=method.includes('Cash')?'none':'block'}
 document.getElementById('paymentMethod').addEventListener('change',updatePriceSummary);
-document.getElementById('getLocationBtn').onclick=()=>{let s=document.getElementById('locationStatus');s.innerText='Location nicchi...';navigator.geolocation.getCurrentPosition(p=>{let link=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;document.getElementById('locationLink').value=link;s.innerHTML=`✅ Added - <a href="${link}" target="_blank" class="text-blue-600 underline">View Map</a>`},()=>{s.innerText='❌ Permission dao, na hole address diye hobe'})};
-fetch('/api/dresses').then(r=>r.json()).then(data=>{allDresses=data;document.getElementById('product-grid').innerHTML=data.map(i=>{let price=parseInt(i.price),orig=i.originalPrice?parseInt(i.originalPrice):Math.round(price*1.8),disc=Math.round((orig-price)/orig*100),rating=i.rating||'4.8';return `<div id="card-${i.id}" class="bg-white rounded-lg shadow overflow-hidden p-4 flex flex-col justify-between relative"><div class="relative"><img src="${i.image}" onclick="openLightbox('${i.image}')" class="w-full h-56 object-cover rounded cursor-zoom-in"><span class="discount-badge bg-pink-600 text-white text-xs px-2 py-1 rounded-full font-bold">${disc}% OFF</span></div><div><h3 class="font-bold mt-2 text-[15px]">ID: ${i.id} - ${i.name}</h3><p class="text-xs text-gray-500 h-8 overflow-hidden">${i.details||'Premium quality dress, best fabric'}</p><p class="text-xs text-yellow-500 mt-1">⭐ ${rating} | 128 reviews | Size: ${i.size||'S,M,L'}</p><p class="mt-1"><span class="line-through text-sm text-gray-400">₹${orig}</span> <span class="text-pink-600 font-bold text-xl">₹${price}</span></p></div><button onclick="selectToBuy(${i.id})" class="mt-3 bg-gray-900 text-white py-2 rounded-lg font-bold hover:bg-pink-600 transition">Buy Now</button></div>`}).join('')});
-document.getElementById('order-form').addEventListener('submit',async e=>{e.preventDefault();let payload={dressId:document.getElementById('dressId').value,name:document.getElementById('name').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,location:document.getElementById('locationLink').value,paymentMethod:document.getElementById('paymentMethod').value,finalPrice:document.getElementById('price-summary').dataset.final};let res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let d=await res.json();document.getElementById('response-msg').innerText=d.message;if(d.success)e.target.reset()});
-async function trackOrder(){let phone=document.getElementById('trackPhone').value;if(!phone)return alert('Phone dao');let res=await fetch(`/api/orders?phone=${phone}`);let data=await res.json();let div=document.getElementById('trackResult');if(!data.length){div.innerHTML='<p class="text-red-500">No order found</p>';return}div.innerHTML=data.map(o=>`<div class="border p-3 rounded mt-2 bg-gray-50"><b>Order #${o.id} - ${o.dressName||'Dress '+o.dressId}</b><br>Status: <span class="font-bold text-pink-600">${o.status||'Order Placed'}</span><div class="w-full bg-gray-200 rounded-full h-2 my-2"><div class="bg-pink-600 h-2 rounded-full" style="width:${o.status=='Delivered'? '100%': o.status=='Out for Delivery'?'80%': o.status=='Shipped'?'60%': o.status=='Packed'?'40%':'20%'}"></div></div>📍 Current: ${o.currentLocation||'Processing at warehouse'}<br>📅 Delivery: ${o.deliveryDate||'Updating soon'} ⏰ ${o.deliveryTime||''}<br><a href="${o.location||'#'}" target="_blank" class="text-blue-600 underline text-xs">Your Shared Location</a></div>`).join('')}
+document.getElementById('getLocationBtn').onclick=()=>{let s=document.getElementById('locationStatus');s.innerText='Location nicchi...';navigator.geolocation.getCurrentPosition(p=>{let link=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;document.getElementById('locationLink').value=link;s.innerHTML=`✅ Added - <a href="${link}" target="_blank" class="text-blue-600 underline">View Map</a>`},()=>{s.innerText='❌ Permission dao'})};
+fetch('/api/dresses').then(r=>r.json()).then(data=>{allDresses=data;document.getElementById('product-grid').innerHTML=data.map(i=>{let price=parseInt(i.price),orig=i.originalPrice?parseInt(i.originalPrice):Math.round(price*1.8),disc=Math.round((orig-price)/orig*100),rating=i.rating||'4.8';return `<div id="card-${i.id}" class="bg-white rounded-lg shadow p-4 flex flex-col justify-between"><div class="relative"><img src="${i.image}" onclick="openLightbox('${i.image}')" class="w-full h-56 object-cover rounded cursor-zoom-in"><span class="absolute top-2 left-2 bg-pink-600 text-white text-xs px-2 py-1 rounded-full font-bold">${disc}% OFF</span></div><div><h3 class="font-bold mt-2 text-[15px]">ID: ${i.id} - ${i.name}</h3><p class="text-xs text-gray-500 h-8 overflow-hidden">${i.details||'Premium quality dress'}</p><p class="text-xs text-yellow-500 mt-1">⭐ ${rating} | 128 reviews | Size: ${i.size||'S,M,L'}</p><p class="mt-1"><span class="line-through text-sm text-gray-400">₹${orig}</span> <span class="text-pink-600 font-bold text-xl">₹${price}</span></p></div><button onclick="selectToBuy(${i.id})" class="mt-3 bg-gray-900 text-white py-2.5 rounded-lg font-bold hover:bg-pink-600 transition">Buy Now</button></div>`}).join('')});
+document.getElementById('order-form').addEventListener('submit',async e=>{e.preventDefault();let payload={dressId:document.getElementById('dressId').value,name:document.getElementById('name').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,location:document.getElementById('locationLink').value,paymentMethod:document.getElementById('paymentMethod').value,finalPrice:document.getElementById('price-summary').dataset.final};let res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let d=await res.json();document.getElementById('response-msg').innerText=d.message;if(d.success){setTimeout(()=>{closeCheckout();e.target.reset()},2000)}});
+async function trackOrder(){let phone=document.getElementById('trackPhone').value;if(!phone)return alert('Phone dao');let res=await fetch(`/api/orders?phone=${phone}`);let data=await res.json();let div=document.getElementById('trackResult');if(!data.length){div.innerHTML='<p class="text-red-500">No order found</p>';return}div.innerHTML=data.map(o=>`<div class="border p-3 rounded mt-2 bg-gray-50"><b>Order #${o.id} - ${o.dressName||'Dress '+o.dressId}</b><br>Status: <span class="font-bold text-pink-600">${o.status||'Order Placed'}</span><div class="w-full bg-gray-200 rounded-full h-2 my-2"><div class="bg-pink-600 h-2 rounded-full" style="width:${o.status=='Delivered'?'100%':o.status=='Out for Delivery'?'80%':o.status=='Shipped'?'60%':o.status=='Packed'?'40%':'20%'}"></div></div>📍 Current: ${o.currentLocation||'Processing'}<br>📅 Delivery: ${o.deliveryDate||'Updating soon'} ⏰ ${o.deliveryTime||''}</div>`).join('')}
 </script>
 </body>
 </html>
