@@ -1,12 +1,3 @@
-{
-  "name": "spy-botz-dresses-shop",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.19.2"
-  }
-}
-
+git add .
+git commit -m "Add proper package-lock.json"
+git push origin main
