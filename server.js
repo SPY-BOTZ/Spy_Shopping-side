@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ডিফল্ট কিছু ড্রেস
+// ডিফল্ট প্রোডাক্ট
 let dresses = [
   { id: 1, name: 'Floral Summer Dress', price: 1299, size: 'M', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400' },
   { id: 2, name: 'Elegant Evening Gown', price: 2499, size: 'L', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400' }
@@ -16,12 +16,23 @@ let dresses = [
 
 let orders = [];
 
-// প্রোডাক্ট দেখার API
+// শপ পেজের জন্য প্রোডাক্ট API
 app.get('/api/dresses', (req, res) => {
   res.json(dresses);
 });
 
-// অ্যাডমিন প্যানেল থেকে নতুন প্রোডাক্ট (ছবি ও দাম সহ) যোগ করার API
+// অ্যাডমিন লগইন API (এখানে আপনার ইউজারনেম ও পাসওয়ার্ড সেট করা আছে)
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body;
+  // ইউজারনেম: admin, পাসওয়ার্ড: spybotz123 (আপনি চাইলে নিচের কোড থেকে বদলাতে পারেন)
+  if (username === 'admin' && password === 'spybotz123') {
+    res.json({ success: true, message: 'Login successful' });
+  } else {
+    res.json({ success: false, message: 'Invalid Username or Password!' });
+  }
+});
+
+// নতুন প্রোডাক্ট যোগ করার API
 app.post('/api/admin/add-dress', (req, res) => {
   const { name, price, size, image } = req.body;
   const newDress = {
@@ -59,7 +70,7 @@ app.post('/api/order', (req, res) => {
   res.json({ success: true, message: `Order placed! Order ID: ${newOrder.orderId}` });
 });
 
-// অর্ডারের ডাটা দেখার API
+// অর্ডার দেখার API
 app.get('/api/admin/orders', (req, res) => {
   res.json(orders);
 });
