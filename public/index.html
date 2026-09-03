@@ -1,229 +1,84 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPY BOTZ - Dresses Shop</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-       .line-through-custom { text-decoration: line-through; opacity: 0.6; }
-        #lightbox { display: none; }
-        #lightbox.active { display: flex; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPY BOTZ - Ultra Dress Shop</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>#lightbox{display:none}#lightbox.active{display:flex}.discount-badge{position:absolute;top:8px;left:8px}</style>
 </head>
 <body class="bg-gray-50 text-gray-800">
+<header class="bg-white shadow p-4 flex justify-between items-center max-w-6xl mx-auto rounded-b-lg sticky top-0 z-30">
+<h1 class="text-2xl font-bold text-pink-600">SPY BOTZ Shop</h1>
+<a href="#trackBox" class="bg-black text-white px-4 py-1 rounded-full text-xs">Track Order</a>
+</header>
+<main class="max-w-6xl mx-auto p-6">
+<h2 class="text-xl font-bold mb-4">Available Dresses - Ultra Collection</h2>
+<div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
 
-    <header class="bg-white shadow-md p-4 flex justify-between items-center max-w-6xl mx-auto rounded-b-lg sticky top-0 z-30">
-        <h1 class="text-2xl font-bold text-pink-600">SPY BOTZ Shop</h1>
-        <span class="text-xs bg-pink-100 text-pink-600 px-3 py-1 rounded-full">Premium Collection</span>
-    </header>
+<!-- CHECKOUT WRAPPER - ETA SELECTED PRODUCT ER NICHE JABE -->
+<div id="checkout-wrapper" class="hidden mt-6">
+<div class="bg-white p-6 rounded-xl shadow-xl max-w-xl mx-auto border-t-4 border-pink-600">
+<h3 class="text-xl font-bold text-pink-600">Checkout & Place Order</h3>
+<p id="checkout-product-name" class="text-sm text-gray-500 mb-2"></p>
+<div id="price-summary" class="bg-gray-100 p-3 rounded mb-4 text-sm font-medium"></div>
+<form id="order-form" class="space-y-3">
+<input id="dressId" required readonly class="w-full border p-2 rounded bg-gray-100 font-bold" placeholder="Dress ID">
+<input id="name" required class="w-full border p-2 rounded" placeholder="Your Name">
+<input id="phone" required class="w-full border p-2 rounded" placeholder="Phone Number">
+<textarea id="address" required class="w-full border p-2 rounded" placeholder="Full Delivery Address"></textarea>
+<div>
+<label class="text-sm font-bold">📍 Live Delivery Location</label>
+<div class="flex gap-2 mt-1">
+<input id="locationLink" readonly class="w-full border p-2 rounded text-sm" placeholder="Click Get Location">
+<button type="button" id="getLocationBtn" class="bg-blue-600 text-white px-3 rounded text-xs">Get Location</button>
+</div>
+<p id="locationStatus" class="text-xs text-gray-500 mt-1"></p>
+</div>
+<select id="paymentMethod" class="w-full border p-2 rounded font-bold">
+<option value="Online Payment (UPI/Card)">Online Payment - Extra Discount</option>
+<option value="Cash on Delivery">Cash on Delivery (+₹150)</option>
+</select>
+<div id="online-pay-box" class="border-2 border-dashed border-pink-300 p-3 rounded-lg bg-pink-50 text-center">
+<p class="font-bold text-pink-700 text-sm">UPI ID - Pay & Get Discount</p>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=BHARATPE.9Q0Q0K0Z8Q466572@unitype%26pn=SPY%20BOTZ%20Shop" class="mx-auto my-2 bg-white p-2 rounded">
+<div class="flex justify-center items-center gap-2"><code class="bg-white px-2 py-1 rounded text-xs font-bold">BHARATPE.9Q0Q0K0Z8Q466572@unitype</code><button type="button" onclick="navigator.clipboard.writeText('BHARATPE.9Q0Q0K0Z8Q466572@unitype');alert('Copied!')" class="bg-pink-600 text-white px-2 py-1 rounded text-xs">Copy</button></div>
+</div>
+<button class="w-full bg-pink-600 text-white font-bold py-3 rounded-lg text-lg">Buy Now - Place Order</button>
+</form>
+<p id="response-msg" class="mt-3 text-center font-bold text-green-600"></p>
+</div>
+</div>
 
-    <main class="max-w-6xl mx-auto p-4 md:p-6">
-        <h2 class="text-xl font-semibold mb-4">Available Dresses</h2>
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+<!-- TRACK ORDER -->
+<div id="trackBox" class="mt-16 bg-white p-6 rounded-xl shadow max-w-xl mx-auto">
+<h3 class="font-bold text-lg"><i class="fa-solid fa-truck-fast"></i> Track Your Order</h3>
+<p class="text-xs text-gray-500 mb-2">Phone number diye search koro, dekhte pabe kothay ache</p>
+<div class="flex gap-2"><input id="trackPhone" placeholder="Phone Number" class="flex-1 border p-2 rounded"><button onclick="trackOrder()" class="bg-black text-white px-4 rounded">Track</button></div>
+<div id="trackResult" class="mt-4 text-sm"></div>
+</div>
 
-        <!-- Dynamic Checkout Container -->
-        <div id="checkout-wrapper" class="hidden mt-8">
-            <div class="bg-white p-6 rounded-xl shadow-lg max-w-xl mx-auto border-t-4 border-pink-600">
-                <h3 class="text-xl font-bold mb-1 text-pink-600">Checkout & Place Order</h3>
-                <p id="checkout-product-name" class="text-sm text-gray-500 mb-4">Selected Product</p>
-
-                <div id="price-summary" class="bg-gray-100 p-3 rounded mb-4 text-sm"></div>
-
-                <form id="order-form" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium">Select Dress ID</label>
-                        <input type="number" id="dressId" required class="w-full border p-2 rounded mt-1 bg-gray-50" readonly>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Your Name</label>
-                        <input type="text" id="name" required class="w-full border p-2 rounded mt-1" placeholder="Your name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Phone Number</label>
-                        <input type="text" id="phone" required class="w-full border p-2 rounded mt-1" placeholder="Phone number">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Delivery Address</label>
-                        <textarea id="address" required class="w-full border p-2 rounded mt-1" placeholder="Full Address"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Payment Method</label>
-                        <select id="paymentMethod" class="w-full border p-2 rounded mt-1 font-semibold">
-                            <option value="Online Payment (UPI/Card)">Online Payment (UPI / Card) - Extra Discount</option>
-                            <option value="Cash on Delivery">Cash on Delivery (COD) - +₹150 Extra</option>
-                        </select>
-                    </div>
-
-                    <!-- Online Payment Box -->
-                    <div id="online-pay-box" class="border-2 border-dashed border-pink-300 p-4 rounded-lg bg-pink-50 text-center">
-                        <p class="font-bold text-pink-700">Pay via UPI & Get Discount!</p>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=BHARATPE.9Q0Q0K0Z8Q466572@unitype%26pn=SPY%20BOTZ%20Shop" alt="UPI QR" class="mx-auto my-3 rounded bg-white p-2">
-                        <p class="text-sm">UPI ID:</p>
-                        <div class="flex items-center justify-center gap-2 mt-1">
-                            <code class="bg-white px-2 py-1 rounded text-xs font-bold break-all">BHARATPE.9Q0Q0K0Z8Q466572@unitype</code>
-                            <button type="button" onclick="navigator.clipboard.writeText('BHARATPE.9Q0Q0K0Z8Q466572@unitype'); alert('UPI Copied!')" class="bg-pink-600 text-white px-2 py-1 rounded text-xs">Copy</button>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2">Payment kore Transaction ID address er sathe likhe din</p>
-                    </div>
-
-                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-3 rounded-lg hover:bg-pink-700 text-lg shadow">Checkout & Place Order</button>
-                </form>
-                <p id="response-msg" class="mt-4 font-medium text-center text-green-600"></p>
-            </div>
-        </div>
-
-        <!-- Admin & Shop Details Section -->
-        <div class="mt-16 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div class="bg-white p-5 rounded-lg shadow">
-                <h4 class="font-bold text-lg mb-2"><i class="fa-solid fa-store text-pink-600"></i> SPY BOTZ Shop Details</h4>
-                <p class="text-sm text-gray-600">Premium Girls Dress Collection. Trusted delivery all over India. 7 Days Return available for online payment orders. Best quality at lowest price.</p>
-                <ul class="text-sm mt-3 space-y-1 text-gray-700">
-                    <li><i class="fa-solid fa-truck"></i> Fast Delivery - 3 to 5 Days</li>
-                    <li><i class="fa-solid fa-shield-halved"></i> Secure Payment</li>
-                    <li><i class="fa-solid fa-tag"></i> Online Payment = Extra Discount</li>
-                </ul>
-            </div>
-            <div class="bg-white p-5 rounded-lg shadow">
-                <h4 class="font-bold text-lg mb-2"><i class="fa-solid fa-user-shield text-pink-600"></i> Admin Contact</h4>
-                <p class="text-sm"><i class="fa-solid fa-envelope"></i> Gmail: spybotzyt@gmail.com</p>
-                <p class="text-sm mt-1"><i class="fa-solid fa-phone"></i> Phone: +919004244736</p>
-                <p class="text-sm mt-1"><i class="fa-solid fa-location-dot"></i> Location: West Bengal, India</p>
-                <p class="text-xs text-gray-500 mt-3">Order related kono problem hole direct contact korun.</p>
-            </div>
-        </div>
-
-        <!-- Big Developer Button -->
-        <div class="mt-10 max-w-4xl mx-auto">
-            <a href="https://t.me/Botmaster55" target="_blank" class="block w-full bg-gradient-to-r from-gray-900 to-black text-white text-center py-4 rounded-xl font-bold text-xl shadow-lg hover:scale-[1.02] transition">
-                <i class="fa-solid fa-code"></i> Developer - SPY BOTZ <i class="fa-brands fa-telegram ml-2"></i>
-            </a>
-            <div class="flex gap-3 mt-3">
-                <a href="https://wa.link/hxyi2q" target="_blank" class="flex-1 bg-green-600 text-white text-center py-3 rounded-lg font-bold"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-                <a href="https://t.me/Botmaster55" target="_blank" class="flex-1 bg-sky-500 text-white text-center py-3 rounded-lg font-bold"><i class="fa-brands fa-telegram"></i> Telegram</a>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Image Lightbox -->
-    <div id="lightbox" class="fixed inset-0 bg-black/80 z-50 items-center justify-center p-4" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
-    </div>
-
-    <script>
-        let allDresses = [];
-        const checkoutWrapper = document.getElementById('checkout-wrapper');
-        const onlineBox = document.getElementById('online-pay-box');
-        let selectedProduct = null;
-
-        function openLightbox(src){
-            document.getElementById('lightbox-img').src = src;
-            document.getElementById('lightbox').classList.add('active');
-        }
-
-        function selectToBuy(id){
-            selectedProduct = allDresses.find(d => d.id == id);
-            document.getElementById('dressId').value = id;
-            document.getElementById('checkout-product-name').innerText = `ID: ${selectedProduct.id} - ${selectedProduct.name}`;
-            updatePriceSummary();
-            checkoutWrapper.classList.remove('hidden');
-
-            // Move checkout under selected card
-            const card = document.getElementById(`card-${id}`);
-            if(card){
-                card.insertAdjacentElement('afterend', checkoutWrapper);
-            }
-            checkoutWrapper.scrollIntoView({behavior: 'smooth', block: 'center'});
-        }
-
-        function updatePriceSummary(){
-            if(!selectedProduct) return;
-            const method = document.getElementById('paymentMethod').value;
-            let basePrice = parseInt(selectedProduct.price);
-            let original = selectedProduct.originalPrice? parseInt(selectedProduct.originalPrice) : Math.round(basePrice * 1.8);
-            let finalPrice = basePrice;
-            let extraText = '';
-
-            if(method.includes('Cash on Delivery')){
-                finalPrice = basePrice + 150;
-                extraText = `<span class="text-red-600">+₹150 COD Charge</span>`;
-                onlineBox.classList.add('hidden');
-            } else {
-                finalPrice = basePrice;
-                extraText = `<span class="text-green-600">You Save ₹150 + Extra Discount!</span>`;
-                onlineBox.classList.remove('hidden');
-            }
-
-            document.getElementById('price-summary').innerHTML = `
-                <div class="flex justify-between"><span>Original Price:</span> <span class="line-through-custom">₹${original}</span></div>
-                <div class="flex justify-between"><span>Discount Price:</span> <span>₹${basePrice}</span></div>
-                <div class="flex justify-between font-bold text-lg mt-1 border-t pt-1"><span>Final Payable:</span> <span class="text-pink-600">₹${finalPrice}</span></div>
-                <div class="text-xs mt-1">${extraText}</div>
-            `;
-            document.getElementById('price-summary').dataset.final = finalPrice;
-        }
-
-        document.getElementById('paymentMethod').addEventListener('change', updatePriceSummary);
-
-        fetch('/api/dresses')
-           .then(res => res.json())
-           .then(data => {
-                allDresses = data;
-                const grid = document.getElementById('product-grid');
-                grid.innerHTML = data.map(item => {
-                    let price = parseInt(item.price);
-                    let original = item.originalPrice? parseInt(item.originalPrice) : Math.round(price * 1.8);
-                    let discount = Math.round(((original - price)/original)*100);
-                    let rating = item.rating || (4.5 + Math.random()*0.5).toFixed(1);
-                    return `
-                    <div id="card-${item.id}" class="bg-white rounded-xl shadow overflow-hidden p-3 flex flex-col justify-between hover:shadow-xl transition">
-                        <div>
-                            <div class="relative">
-                                <img src="${item.image}" alt="${item.name}" onclick="openLightbox('${item.image}')" class="w-full h-56 object-cover rounded-lg cursor-zoom-in">
-                                <span class="absolute top-2 left-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">${discount}% OFF</span>
-                            </div>
-                            <h3 class="font-bold mt-3 text-[15px]">ID: ${item.id} - ${item.name}</h3>
-                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${item.details || 'Premium quality dress, perfect for summer & party wear. Soft fabric & trendy design.'}</p>
-                            <div class="flex items-center gap-1 mt-2 text-yellow-500 text-xs">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                                <span class="text-gray-600 ml-1">${rating} (128 reviews)</span>
-                            </div>
-                            <div class="mt-2">
-                                <span class="line-through-custom text-sm mr-2">₹${original}</span>
-                                <span class="text-pink-600 font-extrabold text-xl">₹${price}</span>
-                            </div>
-                            <p class="text-gray-500 text-xs mt-1">Size: ${item.size} | COD +₹150</p>
-                        </div>
-                        <button onclick="selectToBuy(${item.id})" class="mt-4 bg-gray-900 text-white py-2.5 rounded-lg font-bold hover:bg-pink-600 transition"><i class="fa-solid fa-bag-shopping mr-1"></i> Buy Now</button>
-                    </div>
-                `}).join('');
-            });
-
-        document.getElementById('order-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const finalPrice = document.getElementById('price-summary').dataset.final;
-            const payload = {
-                dressId: document.getElementById('dressId').value,
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                paymentMethod: document.getElementById('paymentMethod').value,
-                finalPrice: finalPrice
-            };
-            const res = await fetch('/api/order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const data = await res.json();
-            document.getElementById('response-msg').innerText = data.message + (finalPrice? ` | Payable: ₹${finalPrice}` : '');
-            if(data.success) {
-                document.getElementById('order-form').reset();
-                setTimeout(()=>{ checkoutWrapper.classList.add('hidden'); }, 2000);
-            }
-        });
-    </script>
+<!-- SHOP DETAILS -->
+<div class="mt-10 bg-white p-5 rounded-lg shadow max-w-4xl mx-auto">
+<h3 class="font-bold">SPY BOTZ Shop Details</h3>
+<p class="text-sm mt-2">We provide premium quality dresses at best discount. Online payment a extra discount, COD available. 3-5 days fast delivery. Tumi location share korle aro fast delivery hobe. Tracking admin panel theke update kora hobe.</p>
+<p class="mt-3 text-sm"><i class="fa-solid fa-envelope text-pink-600"></i> spybotzyt@gmail.com | <i class="fa-solid fa-phone text-green-600"></i> +919004244736</p>
+<a href="https://t.me/Botmaster55" target="_blank" class="block w-full bg-black text-white text-center py-4 rounded-xl font-bold mt-4 text-lg">DEVELOPER - TELEGRAM / WHATSAPP</a>
+<div class="flex gap-2 mt-3"><a href="https://wa.link/hxyi2q" target="_blank" class="flex-1 bg-green-600 text-white text-center py-3 rounded-lg font-bold">WhatsApp</a><a href="https://t.me/Botmaster55" target="_blank" class="flex-1 bg-sky-500 text-white text-center py-3 rounded-lg font-bold">Telegram</a></div>
+</div>
+</main>
+<div id="lightbox" class="fixed inset-0 bg-black/80 z-50 items-center justify-center p-4" onclick="this.classList.remove('active')"><img id="lightbox-img" class="max-h-[90vh] rounded-lg shadow-2xl"></div>
+<script>
+let allDresses=[],selectedProduct=null;
+const checkoutWrapper=document.getElementById('checkout-wrapper');
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('active')}
+function selectToBuy(id){selectedProduct=allDresses.find(d=>d.id==id);document.getElementById('dressId').value=id;document.getElementById('checkout-product-name').innerText=`Selected: ID ${selectedProduct.id} - ${selectedProduct.name}`;updatePriceSummary();checkoutWrapper.classList.remove('hidden');document.getElementById(`card-${id}`).insertAdjacentElement('afterend',checkoutWrapper);checkoutWrapper.scrollIntoView({behavior:'smooth',block:'center'})}
+function updatePriceSummary(){if(!selectedProduct)return;let base=parseInt(selectedProduct.price),orig=selectedProduct.originalPrice?parseInt(selectedProduct.originalPrice):Math.round(base*1.8),method=document.getElementById('paymentMethod').value,final=method.includes('Cash')?base+150:base,save=orig-final;document.getElementById('price-summary').innerHTML=`<div class="flex justify-between"><span>Original:</span><span class="line-through">₹${orig}</span></div><div class="flex justify-between"><span>Discount Price:</span><span>₹${base}</span></div><div class="flex justify-between font-bold text-base border-t pt-1 mt-1"><span>Final Payable (${method.includes('Cash')?'+₹150 COD': 'Online Disc'}):</span><span class="text-pink-600">₹${final}</span></div><div class="text-green-600 text-xs">You Save ₹${save}!</div>`;document.getElementById('price-summary').dataset.final=final;document.getElementById('online-pay-box').style.display=method.includes('Cash')?'none':'block'}
+document.getElementById('paymentMethod').addEventListener('change',updatePriceSummary);
+document.getElementById('getLocationBtn').onclick=()=>{let s=document.getElementById('locationStatus');s.innerText='Location nicchi...';navigator.geolocation.getCurrentPosition(p=>{let link=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;document.getElementById('locationLink').value=link;s.innerHTML=`✅ Added - <a href="${link}" target="_blank" class="text-blue-600 underline">View Map</a>`},()=>{s.innerText='❌ Permission dao, na hole address diye hobe'})};
+fetch('/api/dresses').then(r=>r.json()).then(data=>{allDresses=data;document.getElementById('product-grid').innerHTML=data.map(i=>{let price=parseInt(i.price),orig=i.originalPrice?parseInt(i.originalPrice):Math.round(price*1.8),disc=Math.round((orig-price)/orig*100),rating=i.rating||'4.8';return `<div id="card-${i.id}" class="bg-white rounded-lg shadow overflow-hidden p-4 flex flex-col justify-between relative"><div class="relative"><img src="${i.image}" onclick="openLightbox('${i.image}')" class="w-full h-56 object-cover rounded cursor-zoom-in"><span class="discount-badge bg-pink-600 text-white text-xs px-2 py-1 rounded-full font-bold">${disc}% OFF</span></div><div><h3 class="font-bold mt-2 text-[15px]">ID: ${i.id} - ${i.name}</h3><p class="text-xs text-gray-500 h-8 overflow-hidden">${i.details||'Premium quality dress, best fabric'}</p><p class="text-xs text-yellow-500 mt-1">⭐ ${rating} | 128 reviews | Size: ${i.size||'S,M,L'}</p><p class="mt-1"><span class="line-through text-sm text-gray-400">₹${orig}</span> <span class="text-pink-600 font-bold text-xl">₹${price}</span></p></div><button onclick="selectToBuy(${i.id})" class="mt-3 bg-gray-900 text-white py-2 rounded-lg font-bold hover:bg-pink-600 transition">Buy Now</button></div>`}).join('')});
+document.getElementById('order-form').addEventListener('submit',async e=>{e.preventDefault();let payload={dressId:document.getElementById('dressId').value,name:document.getElementById('name').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,location:document.getElementById('locationLink').value,paymentMethod:document.getElementById('paymentMethod').value,finalPrice:document.getElementById('price-summary').dataset.final};let res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let d=await res.json();document.getElementById('response-msg').innerText=d.message;if(d.success)e.target.reset()});
+async function trackOrder(){let phone=document.getElementById('trackPhone').value;if(!phone)return alert('Phone dao');let res=await fetch(`/api/orders?phone=${phone}`);let data=await res.json();let div=document.getElementById('trackResult');if(!data.length){div.innerHTML='<p class="text-red-500">No order found</p>';return}div.innerHTML=data.map(o=>`<div class="border p-3 rounded mt-2 bg-gray-50"><b>Order #${o.id} - ${o.dressName||'Dress '+o.dressId}</b><br>Status: <span class="font-bold text-pink-600">${o.status||'Order Placed'}</span><div class="w-full bg-gray-200 rounded-full h-2 my-2"><div class="bg-pink-600 h-2 rounded-full" style="width:${o.status=='Delivered'? '100%': o.status=='Out for Delivery'?'80%': o.status=='Shipped'?'60%': o.status=='Packed'?'40%':'20%'}"></div></div>📍 Current: ${o.currentLocation||'Processing at warehouse'}<br>📅 Delivery: ${o.deliveryDate||'Updating soon'} ⏰ ${o.deliveryTime||''}<br><a href="${o.location||'#'}" target="_blank" class="text-blue-600 underline text-xs">Your Shared Location</a></div>`).join('')}
+</script>
 </body>
 </html>
