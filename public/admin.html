@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - SPY BOTZ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <!-- Login Box -->
+    <div id="login-box" class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center text-pink-600">Admin Login</h2>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium">Username</label>
+                <input type="text" id="username" required class="w-full border p-2 rounded mt-1" placeholder="Enter username">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Password</label>
+                <input type="password" id="password" required class="w-full border p-2 rounded mt-1" placeholder="Enter password">
+            </div>
+            <button type="submit" class="w-full bg-gray-900 text-white font-bold py-2 rounded hover:bg-pink-600">Login</button>
+        </form>
+        <p id="login-error" class="text-red-500 text-sm mt-3 text-center"></p>
+    </div>
+
+    <!-- Admin Panel Dashboard (Hidden initially) -->
+    <div id="admin-dashboard" class="hidden max-w-5xl mx-auto p-6 w-full space-y-8">
+        <div class="flex justify-between items-center bg-white p-4 rounded shadow">
+            <h1 class="text-xl font-bold text-pink-600">Admin Dashboard - SPY BOTZ</h1>
+            <button onclick="location.reload()" class="bg-red-500 text-white px-3 py-1 rounded text-sm">Logout</button>
+        </div>
+
+        <!-- Add Product -->
+        <div class="bg-white p-6 rounded shadow max-w-xl mx-auto">
+            <h3 class="text-lg font-bold mb-4 text-gray-800">Add New Dress</h3>
+            <form id="add-product-form" class="space-y-4">
+                <input type="text" id="p-name" placeholder="Dress Name" required class="w-full border p-2 rounded">
+                <input type="number" id="p-price" placeholder="Price (₹)" required class="w-full border p-2 rounded">
+                <input type="text" id="p-size" placeholder="Size (M, L, XL)" required class="w-full border p-2 rounded">
+                <input type="url" id="p-image" placeholder="Image URL Link" required class="w-full border p-2 rounded">
+                <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Add Product</button>
+            </form>
+            <p id="add-msg" class="text-green-600 text-sm mt-2 text-center"></p>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="bg-white p-6 rounded shadow overflow-x-auto">
+            <h3 class="text-lg font-bold mb-4 text-gray-800">Customer Orders</h3>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 border-b text-sm">
+                        <th class="p-2">Order ID</th>
+                        <th class="p-2">Customer</th>
+                        <th class="p-2">Phone</th>
+                        <th class="p-2">Address</th>
+                        <th class="p-2">Dress</th>
+                        <th class="p-2">Price</th>
+                        <th class="p-2">Payment</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table">
+                    <tr><td colspan="7" class="p-4 text-center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Default Login Credentials Check
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                })
+            });
+            const data = await res.json();
+            if(data.success) {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                document.body.classList.remove('flex', 'items-center', 'justify-center', 'h-screen');
+                loadOrders();
+            } else {
+                document.getElementById('login-error').innerText = data.message;
+            }
+        });
+
+        // Add Product
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const res = await fetch('/api/admin/add-dress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('p-name').value,
+                    price: document.getElementById('p-price').value,
+                    size: document.getElementById('p-size').value,
+                    image: document.getElementById('p-image').value
+                })
+            });
+            const data = await res.json();
+            document.getElementById('add-msg').innerText = data.message;
+            if(data.success) document.getElementById('add-product-form').reset();
+        });
+
+        // Load Orders
+        async function loadOrders() {
+            const res = await fetch('/api/admin/orders');
+            const orders = await res.json();
+            const tbody = document.getElementById('orders-table');
+            if(orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center">No orders yet.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = orders.map(o => `
+                <tr class="border-b text-sm">
+                    <td class="p-2 font-mono">${o.orderId}</td>
+                    <td class="p-2 font-semibold">${o.customerName}</td>
+                    <td class="p-2">${o.phone}</td>
+                    <td class="p-2">${o.address}</td>
+                    <td class="p-2">${o.dressName}</td>
+                    <td class="p-2 text-pink-600 font-bold">₹${o.price}</td>
+                    <td class="p-2">${o.paymentMethod}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
