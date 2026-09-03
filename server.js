@@ -7,20 +7,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ULTRA DEFAULT PRODUCTS - Original Price + Details + Rating soho
 let dresses = [
-  { id: 1, name: 'Floral Summer Dress', price: 1299, originalPrice: 2999, size: 'M,L', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400', details: 'Premium cotton, summer special, soft fabric', rating: '4.8' },
-  { id: 2, name: 'Elegant Evening Gown', price: 2499, originalPrice: 4999, size: 'L,XL', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400', details: 'Party wear gown, premium quality', rating: '4.9' }
+  { id: 1, name: 'Floral Summer Dress', price: 1299, originalPrice: 2999, size: 'M,L', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400', details: 'Premium cotton, summer special', rating: '4.8' },
+  { id: 2, name: 'Elegant Evening Gown', price: 2499, originalPrice: 4999, size: 'L,XL', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400', details: 'Party wear gown', rating: '4.9' }
 ];
 
 let orders = [];
 
-// 1. SHOP PAGE ER JONNO PRODUCT API
 app.get('/api/dresses', (req, res) => {
   res.json(dresses);
 });
 
-// 2. ADMIN LOGIN API
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
   if (username === 'admin' && password === 'spybotz123') {
@@ -30,14 +27,13 @@ app.post('/api/admin/login', (req, res) => {
   }
 });
 
-// 3. NEW PRODUCT ADD API - ULTRA FUTURE
 app.post('/api/dresses', (req, res) => {
   const { name, price, originalPrice, size, image, details, rating } = req.body;
   const newDress = {
     id: Date.now(),
     name,
     price: Number(price),
-    originalPrice: Number(originalPrice) || Math.round(Number(price)*1.8),
+    originalPrice: Number(originalPrice) || Math.round(Number(price) * 1.8),
     size,
     image,
     details: details || 'Premium quality dress',
@@ -47,14 +43,13 @@ app.post('/api/dresses', (req, res) => {
   res.json({ success: true, message: 'Product added successfully!' });
 });
 
-// Purano admin add api o rakhlam jate problem na hoy
 app.post('/api/admin/add-dress', (req, res) => {
   const { name, price, size, image, originalPrice, details, rating } = req.body;
   const newDress = {
     id: Date.now(),
     name,
     price: Number(price),
-    originalPrice: Number(originalPrice) || Math.round(Number(price)*1.8),
+    originalPrice: Number(originalPrice) || Math.round(Number(price) * 1.8),
     size,
     image,
     details: details || 'Premium quality',
@@ -64,21 +59,18 @@ app.post('/api/admin/add-dress', (req, res) => {
   res.json({ success: true, message: 'Product added successfully!' });
 });
 
-// DELETE DRESS API
 app.delete('/api/dresses/:id', (req, res) => {
   const id = Number(req.params.id);
   dresses = dresses.filter(d => d.id != id);
   res.json({ success: true });
 });
 
-// 4. ORDER PLACE API - LOCATION + FINAL PRICE SOHO
 app.post('/api/order', (req, res) => {
   const { dressId, name, phone, address, location, paymentMethod, finalPrice } = req.body;
   const selectedDress = dresses.find(d => d.id == dressId);
   if (!selectedDress) {
     return res.status(400).json({ success: false, message: 'Invalid product selected!' });
   }
-
   const newOrder = {
     id: Date.now(),
     orderId: Date.now(),
@@ -90,21 +82,18 @@ app.post('/api/order', (req, res) => {
     name,
     phone,
     address,
-    location: location || '', // Google Map Link
+    location: location || '',
     paymentMethod,
     date: new Date().toLocaleString(),
-    // TRACKING FIELDS - ADMIN UPDATE KORBE
     status: 'Order Placed',
     currentLocation: 'Order Received - Processing',
     deliveryDate: 'Updating soon',
     deliveryTime: ''
   };
-
   orders.push(newOrder);
-  res.json({ success: true, message: `Order placed! Order ID: ${newOrder.id} - Track with phone number` });
+  res.json({ success: true, message: `Order placed! Order ID: ${newOrder.id}` });
 });
 
-// 5. ORDER DEKHAR API - MEMBER TRACKING ER JONNO
 app.get('/api/orders', (req, res) => {
   const { phone } = req.query;
   if (phone) {
@@ -114,24 +103,22 @@ app.get('/api/orders', (req, res) => {
   res.json(orders.reverse());
 });
 
-// ADMIN SOB ORDER DEKBE
 app.get('/api/admin/orders', (req, res) => {
   res.json(orders.reverse());
 });
 
-// 6. TRACKING UPDATE API - ADMIN PANEL THEKE CHANGE KORBE
 app.put('/api/orders/:id/tracking', (req, res) => {
   const id = Number(req.params.id);
   const { currentLocation, deliveryDate, deliveryTime, status } = req.body;
   let order = orders.find(o => o.id == id);
   if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
-
   if (currentLocation !== undefined) order.currentLocation = currentLocation;
   if (deliveryDate !== undefined) order.deliveryDate = deliveryDate;
   if (deliveryTime !== undefined) order.deliveryTime = deliveryTime;
   if (status !== undefined) order.status = status;
-
   res.json({ success: true, message: 'Tracking updated!', order });
 });
 
-app.listen(PORT,
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
